@@ -32,6 +32,8 @@ public class PlayerCtrl : MonoBehaviour
 
     public static string gameState = "playing";
 
+    public int score = 0;
+
     public LayerMask groundLayer; // 착지할 수 있는 레이어
 
 
@@ -137,7 +139,7 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (collision.gameObject.tag == "Dead")
         {
-            Dead();
+            GameOver();
 
         }
         if (collision.gameObject.tag == "Goal")
@@ -145,9 +147,17 @@ public class PlayerCtrl : MonoBehaviour
             Goal();
 
         }
+        if(collision.gameObject.tag == "Score")
+        {
+            ItemData item = collision.gameObject.GetComponent<ItemData>();
+            score = item.Value;
+
+            Destroy(collision.gameObject);
+
+        }
     }
 
-    private void Dead()
+    private void GameOver()
     {
         animator.Play(overAimation);
         gameState = "gameOver";
@@ -163,7 +173,7 @@ public class PlayerCtrl : MonoBehaviour
         GameStop();
     }
 
-    private void GameStop()
+    public void GameStop()
     {
         rigi2D.velocity = new Vector2(0, 0);
     }
